@@ -62,21 +62,6 @@ Check the exception below 👇
 PIPFILE_URL = "https://github.com/streamlit/data_sources_app/blob/main/Pipfile"
 WHAT_NEXT = f"""## What next?
 
-🚀 Kick-off your own app now!  
-
-- Create a new repository
-- Paste the code above into a new file `streamlit_app.py` and use it as a starter! 
-- Add your dependencies in a `requirements.txt` (take inspiration from our [`Pipfile`]({PIPFILE_URL})!)
-
-And the rest **you know already**: deploy, add credentials and you're ready to go!
-
-🤔 Stuck? Check out our docs on [creating](https://docs.streamlit.io/library/get-started/create-an-app) 
-and [deploying](https://docs.streamlit.io/streamlit-cloud/get-started/deploy-an-app) an app or reach out to 
-support@streamlit.io!
-"""
-
-QUESTION_OR_FEEDBACK = """Questions? Comments? Please ask in the [Streamlit community](https://discuss.streamlit.io/)."""
-
 
 def has_data_source_key_in_secrets(data_source: str) -> bool:
     return DATA_SOURCES[data_source]["secret_key"] in st.secrets
@@ -191,6 +176,17 @@ if __name__ == "__main__":
     pick_player = st.selectbox('請選擇球員', ('高志遠', '鄭文瑋', '蔡武勳'))
     st.write('球員名稱', pick_player)
 
+    def run_query(query):
+    rows = conn.execute(query, headers=1)
+    return rows
+
+    sheet_url = st.secrets["public_gsheets_url"]
+    rows = run_query(f'SELECT * FROM "{sheet_url}"')
+
+    # Print results.
+    for row in rows:
+    st.write(f"{row.name} has a :{row.pet}:")
+    
     # Display data source app
     data_source_app = DATA_SOURCES[st.session_state["active_page"]]["module"].app
     data_source_app()
