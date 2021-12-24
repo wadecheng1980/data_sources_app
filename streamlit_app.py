@@ -187,14 +187,9 @@ if __name__ == "__main__":
             st.caption(QUESTION_OR_FEEDBACK)
             st.stop()
 
-    # Release balloons to celebrate (only upon first success)
-    if (
-        show_balloons
-        and data_source not in st.session_state.data_sources_already_connected
-    ):
-        st.session_state.data_sources_already_connected.append(data_source)
-        show_balloons = False
-        st.balloons()
+    st.title('紅番隊淨桿統計')
+    pick_player = st.selectbox('請選擇球員', ('高志遠', '鄭文瑋', '蔡武勳'))
+    st.write('球員名稱', pick_player)
 
     # Display data source app
     data_source_app = DATA_SOURCES[st.session_state["active_page"]]["module"].app
@@ -206,3 +201,5 @@ if __name__ == "__main__":
         what_next()
 
     st.caption(QUESTION_OR_FEEDBACK)
+    
+    
